@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.810.17
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackFill_Data_extaract", "BackFill_Data_extaract\BackFill_Data_extaract.csproj", "{0C2A967A-D5CF-4912-A993-8BB2ABC31A2C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|anycpu = Debug|anycpu
+		Release|anycpu = Release|anycpu
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0C2A967A-D5CF-4912-A993-8BB2ABC31A2C}.Debug|anycpu.ActiveCfg = Debug|anycpu
+		{0C2A967A-D5CF-4912-A993-8BB2ABC31A2C}.Debug|anycpu.Build.0 = Debug|anycpu
+		{0C2A967A-D5CF-4912-A993-8BB2ABC31A2C}.Release|anycpu.ActiveCfg = Release|anycpu
+		{0C2A967A-D5CF-4912-A993-8BB2ABC31A2C}.Release|anycpu.Build.0 = Release|anycpu
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B1FD3748-23CC-42AB-8DAD-002BC1C59A4D}
+	EndGlobalSection
+EndGlobal
