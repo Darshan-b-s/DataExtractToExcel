@@ -32,7 +32,8 @@ namespace SQLServerToExcel
         public const string SmartInv_Audit = "select SmartInv_Audit_ID,SUBSTRING(@@SERVERNAME, 3, 4) as Store_ID, M_STK_RM_LOCN, M_KD, C_Process, TS_INSRT from [SmartInv_Audit] where YEAR(TS_INSRT) = YEAR(GETDATE())";
         public const string SmartInv_AuditLog = "select SmartInv_AuditLog_ID,SUBSTRING(@@SERVERNAME, 3, 4) as Store_ID, M_STK_RM_LOCN, M_KD, C_Process, TS_INSRT from [SmartInv_AuditLog] where YEAR(TS_INSRT) = YEAR(GETDATE())";
         public const string SmartInv_BackFill_OutstandingQTY = "select SUBSTRING(@@SERVERNAME, 3, 4) as Store_ID, M_KD,Q_units, TS_INSRT from [SmartInv_BackFill_OutstandingQTY] where YEAR(TS_INSRT) = YEAR(GETDATE())";
-
+        public const string Stl_200 = "SELECT SUBSTRING(@@SERVERNAME, 3, 4) as Store_ID, M_KD as Keycode, SLT420.C_MDEPT AS Dept_ID, Q_MIN_TAKE as MinQty FROM DKSLS01.dbo.SLT200, DKSLS01.dbo.SLT420 WHERE SLT200.C_MDEPT = SLT420.C_MDEPT";
+        public const string PDT_Data = "select GRP.Str_ID, grp.Session_ID, grp.GroupSeqNum, locn.Location, locn.LocnStart_Date, locn.LocnEnd_Date, item.Keycode, item.ScanDate from PDT_DataCapture grp inner join PDT_DataCapture_LOCN locn on grp.Session_ID = locn.Session_ID and grp.GroupSeqNum = locn.GroupSeqNum inner join PDT_DataCapture_ITEM item on locn.Session_ID = item.Session_ID and locn.GroupSeqNum = item.GroupSeqNum and locn.LocnSeqNum = item.LocnSeqNum where AppName = 'StockroomBackfill'and grp.Group_EndDate is not null and grp.LegacySetDate is not null order by grp.Session_ID";
 
         static void Main(string[] args)
         {
@@ -72,6 +73,7 @@ namespace SQLServerToExcel
                                     connection.Open();
                                     // Define your SQ queryselect
                                     // var query = All_keycodes_selling_floor_locations;
+
 
                                     using (var adapter = new SqlDataAdapter(query.Query, connection))
                                     {
@@ -130,8 +132,12 @@ namespace SQLServerToExcel
             //queryList.Add(rec6);
             //SqlQuery rec7 = new SqlQuery { Query = SmartInv_AuditLog, QueryName = "SmartInv_AuditLog" };
             //queryList.Add(rec7);
-            SqlQuery rec8 = new SqlQuery { Query = SmartInv_BackFill_OutstandingQTY, QueryName = "SInv_BackFill_OutstandingQTY" };
-            queryList.Add(rec8);
+            //SqlQuery rec8 = new SqlQuery { Query = SmartInv_BackFill_OutstandingQTY, QueryName = "SInv_BackFill_OutstandingQTY" };
+            //queryList.Add(rec8);
+            //SqlQuery rec9 = new SqlQuery { Query = Stl_200, QueryName = "Stl_200" };
+            //queryList.Add(rec9);
+            SqlQuery rec10 = new SqlQuery { Query = PDT_Data, QueryName = "pdt_data" };
+            queryList.Add(rec10);
             return queryList;
         }
         //to get list of stores
@@ -182,7 +188,7 @@ namespace SQLServerToExcel
         {
             string Username = "KMTStoreSql";
             string Password = "9@meS4Cc*";
-            string DataBase= "DKSLS01";
+            string DataBase= "PDTDB";
             List<ServerInfo> serverInfos = new List<ServerInfo>();
 
             foreach (var serverName in storesList)
@@ -215,11 +221,15 @@ namespace SQLServerToExcel
             {
                 using (SqlBulkCopy sqlbc = new SqlBulkCopy(conn, SqlBulkCopyOptions.Default, transaction))
                 {
-                    sqlbc.DestinationTableName = "SmartInv_BackFill_OutstandingQTY";
-                    sqlbc.ColumnMappings.Add("Store_ID", "Store_ID");
-                    sqlbc.ColumnMappings.Add("M_KD", "M_KD");
-                    sqlbc.ColumnMappings.Add("Q_units", "Q_units");
-                    sqlbc.ColumnMappings.Add("TS_INSRT", "TS_INSRT");
+                    sqlbc.DestinationTableName = "StkRoomBackfillLocStartEnd";
+                    sqlbc.ColumnMappings.Add("Str_ID", "StoreID");
+                    sqlbc.ColumnMappings.Add("Session_ID", "SessionID");
+                    sqlbc.ColumnMappings.Add("GroupSeqNum", "GroupID");
+                    sqlbc.ColumnMappings.Add("Location", "Location");
+                    sqlbc.ColumnMappings.Add("LocnStart_Date", "LocnStartDate");
+                    sqlbc.ColumnMappings.Add("LocnEnd_Date", "LocnEndDate");
+                    sqlbc.ColumnMappings.Add("Keycode", "Keycode");
+                    sqlbc.ColumnMappings.Add("ScanDate", "ScanDate");
                     sqlbc.BulkCopyTimeout = 800;
                     sqlbc.WriteToServer(data);
                 }
