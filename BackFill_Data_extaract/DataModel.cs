@@ -30,6 +30,6 @@ namespace BackFill_Data_extaract
         public const string Stl_200 = "SELECT SUBSTRING(@@SERVERNAME, 3, 4) as Store_ID, M_KD as Keycode, SLT420.C_MDEPT AS Dept_ID, Q_MIN_TAKE as MinQty FROM DKSLS01.dbo.SLT200, DKSLS01.dbo.SLT420 WHERE SLT200.C_MDEPT = SLT420.C_MDEPT";
         public const string PDT_Data = "select GRP.Str_ID, grp.Session_ID, grp.GroupSeqNum, locn.Location, locn.LocnStart_Date, locn.LocnEnd_Date, item.Keycode, item.ScanDate from PDT_DataCapture grp inner join PDT_DataCapture_LOCN locn on grp.Session_ID = locn.Session_ID and grp.GroupSeqNum = locn.GroupSeqNum inner join PDT_DataCapture_ITEM item on locn.Session_ID = item.Session_ID and locn.GroupSeqNum = item.GroupSeqNum and locn.LocnSeqNum = item.LocnSeqNum where AppName = 'StockroomBackfill'and grp.Group_EndDate is not null and grp.LegacySetDate is not null order by grp.Session_ID";
     }
-    
-    
+
+
 }
